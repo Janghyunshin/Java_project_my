@@ -14,6 +14,7 @@ public class Switch_Ex02 {
 			System.out.println("C 학점");
 		default :
 			System.out.println("F 학점");
+			
 			System.out.println("======================");
 		}
 		
