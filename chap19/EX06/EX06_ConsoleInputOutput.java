@@ -22,46 +22,53 @@ import java.nio.charset.Charset;
 public class EX06_ConsoleInputOutput {
 	public static void main(String[] args) throws IOException {
 		
-		// 1. System.in : 콘솔에서 인풋
-		InputStream is = System.in;
+		// 1. System.in : 콘솔에서 한글을 인풋
+		InputStream is = System.in; 	// new로 생성하지 않고 연결만 설정, 콘솔에서 인풋 값을 받는다.
 		
 		System.out.println("한글을 입력하세요 >>> ");
-		byte[] byteArray1 = new byte[100];
 		
-		int count1 = is.read(byteArray1);
-		String str1 = new String(byteArray1, 0, count1, Charset.defaultCharset());
-		System.out.println(str1);
-		is.close();
+		byte[] byteArray1 = new byte[100];
+		int count1 = is.read(byteArray1); 	// byteArray1에 byte로 \r \n 	, count1 배열에 값이 들어온 갯수,   
+		// int data = is.read(); // 한글을 처리하지 못한다, data에는 1bytee read한 값이 저장 .
+
+		//내 답안
+//		String str1 = new String(byteArray1, 0, count1, Charset.defaultCharset());
+//		System.out.println(str1);
 		
 		// 2. FileOutputStream : 인풋받은 값을 파일에 저장 
 		File outFile = new File ("src/chap19/EX06/input.txt");
-		OutputStream os1 = new FileOutputStream(outFile);
-		str1.getBytes(Charset.defaultCharset());
-		os1.write(byteArray1);
-		os1.write('\n');
+		OutputStream os1 = new FileOutputStream(outFile); 	// 덮어 쓰기 
 		
-		os1.flush();
-		os1.close();
+		os1.write(byteArray1);	// 버퍼 (RAM)에만 쓰여짐
+		os1.flush();			// 버퍼에 쓰인 내용을 파일에 쓰기
 	
 		
-		// 3. FileInputStream : 저장된 파일의 내용을 읽어온다. 
-		File inFile = new File ("src/chap19/EX06/input.txt");
-		InputStream is1 = new FileInputStream(inFile);
+		// 3. FileInputStream : 저장된 파일에서 값을 읽어온다. 
+//		File inFile = new File ("src/chap19/EX06/input.txt");
+		InputStream is1 = new FileInputStream(outFile); 	// read() : 한글을 처리 못한다. read(byte[]) : 한글 처리.
 		byte[] byteArray2 = new byte[100];
 		
-		int count2;
+		int count2 = is1.read(byteArray2);	// read(byte[]) : 한글처리 
+		// int data2 = fis.read();			// read() : 1-byte 씩 처리 
+//		System.out.println(new String (byteArray2, 0, count2, Charset.defaultCharset()));
 		
-		count2 = is1.read(byteArray2);		// 배열 내부에 \r\n 들어간다.
-		System.out.println(new String (byteArray2, 0, count2, Charset.defaultCharset()));
-		is1.close();
+		System.out.println();
+		System.out.println("파일에서 읽은 내용을 콘솔에 출력합니다. >>>>");
+		System.out.println();
 		
-		// 4. system.out : 콘솔에 출력 
+		// 4. system.out : 읽어온 배열을 콘솔에 출력 
 	
-		OutputStream os2 = System.out;
-		String str2 = new String (byteArray2, Charset.defaultCharset());
-		str2.getBytes(Charset.defaultCharset());
+		OutputStream os2 = System.out; 	// 콘솔에 출력 : byte[]
+		
+//		String str2 = new String (byteArray2, Charset.defaultCharset());
+//		str2.getBytes(Charset.defaultCharset());
+		
 		os2.write(byteArray2);
 		os2.flush();
+		
+		is.close();
+		is1.close();
+		os1.close();
 		os2.close();
 	}
 
