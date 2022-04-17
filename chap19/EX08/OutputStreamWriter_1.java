@@ -16,8 +16,17 @@ public class OutputStreamWriter_1 {
 	public static void main(String[] args) {
 
 		// 1. FileWriter를 통해서 데이터 쓰기 (Default : MS949)
-		File osw1 = new File ("src\\chap19\\EX08\\osw1.txt"); 	// MS949
-		File osw2 = new File ("src\\chap19\\EX08\\osw2.txt"); 	// UTF-8
+		
+//		File osw1 = new File ("src\\chap19\\EX08\\osw1.txt"); 	// MS949
+//		File osw2 = new File ("src\\chap19\\EX08\\osw2.txt"); 	// UTF-8
+		
+		// 이클립스 외부에 저장하면 잘 적용됨.
+		
+		File osw1  = new File ("C:\\Temp\\osw1.txt");
+		File osw2  = new File ("C:\\Temp\\osw2.txt");
+		
+				
+		
 		
 		try (Writer writer = new FileWriter(osw1);	){
 
