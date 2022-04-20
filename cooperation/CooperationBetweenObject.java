@@ -16,27 +16,9 @@ class Student {
 	String studentName; 	// 학생명
 	int money; 				// 학생이 가진돈, 초기값 : 100,000 
 	
-	
-	// 필드 getter setter 
-	public String getStudentName() {
-		return studentName;
-	}
-
-	public void setStudentName(String studentName) {
-		this.studentName = studentName;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public void setMoney(int money) {
-		this.money = money;
-	}
-	// 
-	Student (String studentName, int money) {
-		this.studentName = studentName;
-		this.money = money;
+	public Student(String studentName, int money) {
+		this.studentName = studentName; 	// 학생명
+		this.money = money; 				// 학생이 가진돈, 초기값 : 100,000 
 	}
 	
 	public void takeBus (Bus bus) { 		// 학생이 버스를 탔을때? 버스에 돈을 지불해야 한다. 
@@ -57,23 +39,9 @@ class Student {
 	}
 	
 	// 000 님의 남은돈은 000 입니다. 
-	public void showInfo() {
-		System.out.println(studentName + " 님의 남은돈은 " + money + " 원 입니다.");
-	}
-	
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Student) {
-			if ( studentName == ((Student)obj).studentName ) {
-				return true;
-			}
-		}
-		return false;
-		
-	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(studentName);
+	public String toString() {
+		return studentName + " 님의 남은돈은 " + money + " 원 입니다.";
 	}
 	
 }
@@ -83,31 +51,6 @@ class Bus {
 	int passengerCount; 	// 승객수						
 	int money;				// 버스의 수입 
 	
-	// Bus 필드 getter . setter
-	
-	public int getBusName() {
-		return busName;
-	}
-
-	public void setBusName(int busName) {
-		this.busName = busName;
-	}
-
-	public int getPassengerCount() {
-		return passengerCount;
-	}
-
-	public void setPassengerCount(int passengerCount) {
-		this.passengerCount = passengerCount;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public void setMoney(int money) {
-		this.money = money;
-	}
 
 	public Bus(int busName) {
 		this.busName= busName;
@@ -115,14 +58,14 @@ class Bus {
 	
 	public void take(int money) { 	// 탈 때,  버스의 수입을 처리, 승객수 처리
 		this.money += money;
-		passengerCount ++;
+		passengerCount += 1;
 	}
 	public void takeOut() {		//  내릴 떄 , 승객수만 감소
-		passengerCount --;
+		passengerCount -= 1;
 	}
-	public void showInfo () {  // 버스 정보
-		System.out.println("버스" + busName + "번의 승객은 " + passengerCount + "명이고 수입은 " + money + " 원 입니다.");
-//		버스 000번의 승객은 000명이고 수입은000 입니다. 
+	@Override
+	public String toString() {
+		return "버스" + busName + "번의 승객은 " + passengerCount + "명이고 수입은 " + money + " 원 입니다.";
 	}
 	
 }
@@ -131,32 +74,6 @@ class Subway {
 	String lineNumber; 		// "1호선", 2호선, 3호선
 	int passengerCount; 	// 승객수
 	int money; 				// 수입
-	
-	// subway 필드 getter. setter
-	
-	public String getLineNumber() {
-		return lineNumber;
-	}
-
-	public void setLineNumber(String lineNumber) {
-		this.lineNumber = lineNumber;
-	}
-
-	public int getPassengerCount() {
-		return passengerCount;
-	}
-
-	public void setPassengerCount(int passengerCount) {
-		this.passengerCount = passengerCount;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public void setMoney(int money) {
-		this.money = money;
-	}
 
 	public Subway (String lineNumber) {
 		this.lineNumber = lineNumber;
@@ -165,210 +82,26 @@ class Subway {
 	//생성자를 통해서 지하철 호선을 인풋 받아서 활성화
 	public void take(int money) { 		// (탈 때) 수입을 처리하는 메소드, 승객수 
 		this.money = money;
-		passengerCount ++;
+		passengerCount += 1;
 	}
 	public void takeOut() {		// 내릴 때, 승객수만 감소
-		passengerCount --;
+		passengerCount -= 1;
 	}
-	public void showInfo () {
-		System.out.println("지하철 " + lineNumber + " 의 승객은 " + passengerCount + "명이고 수입은 " + money + " 원 입니다." );
-//		지하철 00 호선의 승객은 00명이고 수입은  000 입니다. 
+	@Override
+	public String toString() {
+		return "지하철 " + lineNumber + " 의 승객은 " + passengerCount + "명이고 수입은 " + money + " 원 입니다.";
 	}
 }
 
 
 public class CooperationBetweenObject {
-
-	private static ArrayList<Student> aList = new ArrayList<Student>();
-	private static ArrayList<Bus> bList = new ArrayList<Bus>();
-	private static ArrayList<Subway> sList = new ArrayList<Subway>();
-	
-	private static Scanner sc = new Scanner(System.in); 
-	
-	// 학생 객체 생성 메서드
-	private static void createStudent() {
-		System.out.println("------ 1. 학생객체 생성 ------");
-		System.out.print("- 학생이름 : ");
-		String studentName = sc.next();
-		System.out.print("- 돈 입력 : ");
-		int money = sc.nextInt(); 	// 학생이 가진 돈, 초기값
-		
-		//각 필드의 정보를 사용자로 부터 할당 받아서 객체를 생성후 객체에 필드의 값을 저장. 
-		Student student = new Student (studentName, money); //생성자를 통해서 객체에 필드 값 적용후 객체 생성. 
-		
-		//배열 선은은 메소드 외부에서 선언. 전역변수 : 모든 메소드에서 사용가능 
-		aList.add(student);
-		System.out.println("학생 객체가 성공적으로 생성되었습니다. ");
-	}
-	
-	// 학생정보 출력 및 선택 : 	학생이름	가진돈
-	
-	private static void studentInfo() {
-		//코드 작성 :2. 계좌 목록 출력 :  배열에 저장된 객체를 가져와서 학생이름, 금액 을 출력 
-		//배열의 각 방을 순회 하면서 null이 아닌 경우 배열에서 객체를 꺼내서 필드의 정보를 출력. 
-		System.out.println("------ 2. 학생 정보 출력 ------");
-		
-		//배열의 각방의 null아닌 경우 , 객체의 필드의 값을 출력. 
-		for ( int i = 0 ; i < aList.size(); i++) {
-			//각 방의 객체를 담는 변수를 선언 
-			Student student = aList.get(i);    // 0 ~ 99 방의 객체를 student 참조 변수에 담는다. 
-	
-				System.out.print(student.getStudentName());  // 학생 이름 
-				System.out.print("    ");
-				System.out.print(student.getMoney());   // 금액
-				System.out.print("만원");
-				System.out.println();   //라인 개행. 
-		}	
-	}
-	
-	// 버스 탈 때
-	private static void tBus() {
-		System.out.println("-------  3. 버스를 탐  -------");
-		System.out.println("- 학생의 이름을 입력하세요 : ");
-		String studentName = sc.next(); // 학생 선택
-		Student student = findStudent(studentName); //findStudent(학생명)
-		System.out.println("- 버스의 번호를 입력하세요 : ");
-		int busName = sc.nextInt();
-		Bus bus = new Bus(busName);
-		
-		if (student == null) {
-			System.out.println("결과 : 해당 학생이 존재하지 않습니다.  ");
-			return;    // 메소드를 종료. 
-		}
-		
-		student.takeBus(bus);
-		System.out.println(student.studentName + " 님 " + bus.busName + " 번 버스를 탔습니다. 즐거운 하루되세요.");
-		student.showInfo();
-		bus.showInfo();
-	// 버스 내릴 때	
-	}
-		private static void tOutBus() {
-			System.out.println("-------  4. 버스를 내림  -------");
-			System.out.println("- 버스의 번호를 입력하세요 : ");
-			int busName = sc.nextInt();
-			Bus bus = findBus(busName);
-			System.out.println("- 학생의 이름을 입력하세요 : ");
-			String studentName = sc.next(); // 학생 선택
-			Student student = findStudent(studentName); //findStudent(학생명)
-
-			
-			if (student == null) {
-				System.out.println("결과 : 해당 학생이 존재하지 않습니다.  ");
-				return;    // 메소드를 종료. 
-			}
-			
-			
-			student.takeOutBus(bus);
-			System.out.println(student.studentName + " 님 " + bus.busName + " 버스를 내렸습니다. 굿바이~~~. ");
-			student.showInfo();
-			bus.showInfo();
-		}
-	// 지하철 탈 때	
-		private static void tSubway() {
-			System.out.println("-------  5. 지하철을 탐  -------");
-			System.out.println("- 학생의 이름을 입력하세요 : ");
-			String studentName = sc.next(); // 학생 선택
-			Student student = findStudent(studentName); //findStudent(학생명)
-			System.out.println("- 지하철의 호선을 입력하세요 : ");
-			String lineNumber = sc.next();
-			Subway subway = new Subway(lineNumber);
-			
-			if (student == null) {
-				System.out.println("결과 : 해당 학생이 존재하지 않습니다.  ");
-				return;    // 메소드를 종료. 
-			}
-			
-			student.takeSubway(subway);
-			System.out.println(student.studentName + " 님 " + subway.lineNumber + " 지하철를 탔습니다. 즐거운 하루되세요.  ");
-			student.showInfo();
-			subway.showInfo();
-		}
-	// 지하철을 내릴 때
-		private static void tOutSubway() {
-			System.out.println("-------  6. 지하철을 내림  -------");
-			System.out.println("- 학생의 이름을 입력하세요 : ");
-			String studentName = sc.next(); // 학생 선택
-			Student student = findStudent(studentName); //findStudent(학생명)
-			System.out.println("- 지하철의 호선을 입력하세요 : ");
-			String lineNumber = sc.next();
-			Subway subway = findSub(lineNumber);
-			
-			if (student == null) {
-				System.out.println("결과 : 해당 학생이 존재하지 않습니다.  ");
-				return;    // 메소드를 종료. 
-			}
-			
-			
-			
-			student.takeOutSubway(subway);
-			System.out.println(student.studentName + " 님 " + subway.lineNumber + " 지하철를 탔습니다. 즐거운 하루되세요.  ");
-			student.showInfo();
-			subway.showInfo();
-		}
-		
-		
-		
-		
-	// 학생 객체 찾기 
-	private static Student findStudent (String studentName) {
-		Student student = null ; 
-		//코드 작성 
-		for (int i = 0 ; i < aList.size() ; i++) {   
-			if (aList.get(i) != null) {		//배열방의 값이 null이 아닐 경우에 객체의 studentName[학생명] 
-				//각 객체의 방의 studentName 을 담는 변수 선언. 
-				String dbName = aList.get(i).getStudentName(); //배열의 각 방에 저장된 객체의 studentName를 dbName 변수에 할당. 
-				if (dbName.equals(studentName)) {
-					student = aList.get(i); // student 참조변수는 객체의 주소정보를 담는다.
-					break;
-				}
-			}
-		}
-		return student; 
-	}
-	
-	// 버스 객체 찾기 
-		private static Bus findBus (int busName) {
-			Bus bus = null ; 
-			//코드 작성 
-			for (int i = 0 ; i < bList.size() ; i++) {   
-				if (bList.get(i) != null) {		//배열방의 값이 null이 아닐 경우에 객체의 busName[버스번호] 
-					//각 객체의 방의 busName 을 담는 변수 선언. 
-					int bName = bList.get(i).getBusName(); //배열의 각 방에 저장된 객체의 studentName를 dbName 변수에 할당. 
-					if (bName == (busName)) {
-						bus = bList.get(i); // bus 참조변수는 객체의 주소정보를 담는다.
-						break;
-					}
-				}
-			}
-			return bus;
-		}
-		
-	// 지하철 객체 찾기 
-	private static Subway findSub (String lineNumber) {
-		Subway subway = null ; 
-		//코드 작성 
-		for (int i = 0 ; i < sList.size() ; i++) {   
-			if (sList.get(i) != null) {		//배열방의 값이 null이 아닐 경우에 객체의 LineNumber[지하철 호선] 
-				//각 객체의 방의 lineNumber 을 담는 변수 선언. 
-				String sName = sList.get(i).getLineNumber(); //배열의 각 방에 저장된 객체의 lineNumber를 sName 변수에 할당. 
-				if (sName == (lineNumber)) {
-					subway = sList.get(i); // subway 참조변수는 객체의 주소정보를 담는다.
-					break;
-				}
-			}
-		}
-		return subway;
-	}
-	
-	
-	
 	public static void main(String[] args) {
 		
 		ArrayList<Student> studentList = new ArrayList<>();
 		Scanner sc = new Scanner(System.in); 
-		
-
-		
+		String pickStudent = null;
+		Bus bus = new Bus(100);
+		Subway subway = new Subway("1호선");	
 		
 		while(true) {
 			System.out.println("==================================================================================");
@@ -376,34 +109,119 @@ public class CooperationBetweenObject {
 			System.out.println("4. 버스를 내림		| 5. 지하철을 탐			| 6. 지하철을 내림	| 7 종료 ");
 			System.out.println("==================================================================================");
 			System.out.print("선택 >> ");
+			
 			int No = sc.nextInt();
 			// 1. 학생객체 생성
 			if (No == 1) {
-				createStudent();
-			// 2. 학생정보 출력 및 선택
+				System.out.println("--  1. 학생 등록 입니다.  --");
+				System.out.print("-- 첫 번째 학생의 이름을 입력하세요 : ");
+				String studentName1 = sc.next();
+				System.out.print("-- 첫 번째 학생의 돈을 입력하세요 : ");
+				int money1 = sc.nextInt();
+				Student student1 = new Student(studentName1, money1);
+				studentList.add(student1);
+				System.out.println("-- 첫 번째 학생이 등록되었습니다. --");
+				
+				System.out.print("-- 두 번째 학생의 이름을 입력하세요 : ");
+				String studentName2 = sc.next();
+				System.out.print("-- 두 번째 학생의 돈을 입력하세요 : ");
+				int money2 = sc.nextInt();
+				Student student2 = new Student(studentName2, money2);
+				studentList.add(student2);
+				System.out.println("-- 두 번째 학생이 등록되었습니다. --");
+				
+				System.out.print("-- 세 번째 학생의 이름을 입력하세요 : ");
+				String studentName3 = sc.next();
+				System.out.print("-- 세 번째 학생의 돈을 입력하세요 : ");
+				int money3 = sc.nextInt();
+				Student student3 = new Student(studentName3, money3);
+				studentList.add(student3);
+				System.out.println("-- 세 번째 학생이 등록되었습니다. --");
+				
+				System.out.print("-- 네 번째 학생의 이름을 입력하세요 : ");
+				String studentName4 = sc.next();
+				System.out.print("-- 네 번째 학생의 돈을 입력하세요 : ");
+				int money4 = sc.nextInt();
+				Student student4 = new Student(studentName4, money4);
+				studentList.add(student4);
+				System.out.println("-- 네 번째 학생이 등록되었습니다. --");
+				
+				System.out.print("-- 다섯 번째 학생의 이름을 입력하세요 : ");
+				String studentName5 = sc.next();
+				System.out.print("-- 다섯 번째 학생의 돈을 입력하세요 : ");
+				int money5 = sc.nextInt();
+				Student student5 = new Student(studentName5, money5);
+				studentList.add(student5);
+				System.out.println("-- 다섯 번째 학생이 등록되었습니다. --");
+				
+			// 2. 학생정보 출력 및 선택 : 		학생이름	가진돈
 			} else if (No == 2) {
-				studentInfo();
-
+				System.out.println("--  2. 학생 정보 출력입니다.  --");
+				System.out.println("학생이름" +"\t" + "가진돈");
+				for (Student k : studentList) {
+					System.out.println(k);
+				}
+				
+				System.out.println();
+				System.out.print(" 학생선택(이름입력) >>> ");
+				pickStudent = sc.next();
+				System.out.println(pickStudent + " 학생이 선택 되었습니다.");
+				
+				
 			// 3. 버스를 탐
 			} else if (No == 3) {
-				tBus();
+				for (Student k : studentList) {
+					if (pickStudent.equals(k.studentName)) {
+						k.takeBus(bus);
+						System.out.println(k.studentName + " 님이 " + bus.busName + " 번 버스를 탔습니다. 즐거운 하루되세요. ");
+						System.out.println(k.studentName + " 님의 남은 돈은 " + k.money + "원 입니다.");
+						System.out.println("버스 " + bus.busName + " 번의 승객은 " + bus.passengerCount + " 명 이고, 수입은 "
+						+ bus.money + " 원 입니다.");
+					}
+				}
 				
 			} else if (No == 4) {
-				tOutBus();
+				for (Student k : studentList) {
+					if (pickStudent.equals(k.studentName)) {
+						k.takeOutBus(bus);
+						System.out.println(k.studentName + " 님이 " + bus.busName + " 번 버스를 내렸습니다. 굿바이~~~. ");
+						System.out.println(k.studentName + " 님의 남은 돈은 " + k.money + "원 입니다.");
+						System.out.println("버스 " + bus.busName + " 번의 승객은 " + bus.passengerCount + " 명 이고, 수입은 "
+						+ bus.money + " 원 입니다.");
+					}
+				}
 				
 			} else if (No == 5) {
-				tSubway();
-				
+				for (Student k : studentList) {
+					if (pickStudent.equals(k.studentName)) {
+						k.takeSubway(subway);
+						System.out.println(k.studentName + " 님이 " + subway.lineNumber + " 지하철을 탔습니다. 즐거운 하루되세요. ");
+						System.out.println(k.studentName + " 님의 남은 돈은 " + k.money + "원 입니다.");
+						System.out.println("지하철 " + subway.lineNumber + " 의 승객은 " + subway.passengerCount + " 명 이고, 수입은 "
+						+ subway.money + " 원 입니다.");
+					}
+				}
 			} else if (No == 6) {
-				tOutSubway();
-				
+				for (Student k : studentList) {
+					if (pickStudent.equals(k.studentName)) {
+						k.takeOutSubway(subway);
+						System.out.println(k.studentName + " 님이 " + subway.lineNumber + " 지하철을 내렸습니다. 안녕 ~~~ ");
+						System.out.println(k.studentName + " 님의 남은 돈은 " + k.money + "원 입니다.");
+						System.out.println("지하철 " + subway.lineNumber + " 의 승객은 " + subway.passengerCount + " 명 이고, 수입은 "
+						+ subway.money + " 원 입니다.");
+					}
+				}
 			} else if (No == 7) {
 				break;
 			}
 			
 		}
 		System.out.println("프로그램을 종료합니다.");
+		sc.close();
+		
+		
 		/*
+		!! 문제 !!
 		학생 5명 입력 : 학생당 100,000만원 초기값 할당. 
 		=============================================
 		1. 학생객체 생성  | 2. 학생정보 출력 및 선택  
